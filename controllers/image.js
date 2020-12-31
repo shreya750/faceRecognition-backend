@@ -1,17 +1,17 @@
-import { json } from 'body-parser';
-import { App, FACE_DETECT_MODEL } from 'clarifai';
-
-const app = new App({
+//import { App, FACE_DETECT_MODEL } from 'clarifai';
+const Clarifai = require('clarifai');
+const app = new Clarifai.App({
     apiKey: 'c5b1472c37714a84861d590aa32eb6c1'
    });
 
 const handleApiCall = (req,res) => {
+    console.log("req body input is ", req.body.input);
     app.models
-    .predict(FACE_DETECT_MODEL, req.body.input)
+    .predict(Clarifai.FACE_DETECT_MODEL, req.body.input)
     .then(data => {
         res.json(data);
     })
-    .catch(err => res.status(400).json('unable to work with API')
+    .catch(err => res.status(400).json('unable to work with API'))
 }
 
 const handleImage=(req,res,db) => {
@@ -25,7 +25,7 @@ const handleImage=(req,res,db) => {
   .catch(err => res.status(400).json('unable to get entries'))
 }
 
-export default{
+module.exports = {
     handleImage,
     handleApiCall
 }

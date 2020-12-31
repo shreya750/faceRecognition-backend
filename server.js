@@ -4,10 +4,16 @@ const bcrypt = require('bcrypt-nodejs');
 const cors = require('cors');
 const knex = require('knex')
 
-const register =require('./controllers/register');
+// const register =require('./controllers/register');
+// const signin = require('./controllers/signin');
+// const profile = require('./controllers/profile');
+// const image = require('./controllers/image');
+
+const register = require('./controllers/register');
 const signin = require('./controllers/signin');
 const profile = require('./controllers/profile');
-const image = require('./controllers/image').default;
+const image = require('./controllers/image');
+
 const db = knex({
   // Enter your own database information here based on what you created
   client: 'pg',
@@ -20,10 +26,10 @@ const db = knex({
 });
 
 
-db.select('*').from('smart_brain_users').then(data=>{
+// db.select('*').from('smart_brain_users').then(data=>{
    
-    console.log(data);
-});
+//     console.log(data);
+// });
 
 
 //https://medium.com/@selvaganesh93/how-node-js-middleware-works-d8e02a936113
@@ -31,6 +37,8 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(cors());
+
+app.get('/',(req,res) => {res.send(db.users) })
 
 app.post('/signin',(req,res) => {signin.handleSignin(req,res,db,bcrypt)})
 
@@ -50,7 +58,7 @@ app.post('/imageurl',(req,res) => {image.handleApiCall(req,res)})
 // bcrypt.compare("B4c0/\/", hash, function(err, res) {
 //     // res === true
 // });
-app.listen(3002, () => {
-    console.log('app is running on port 3002');
+app.listen(3000, () => {
+    console.log('app is running on port 3000');
 })
 
